@@ -186,5 +186,100 @@ deseq <- function(metadata,counts,sampletype,comparison) {
             #geom_text(aes(x=sample, y=sig, label = o), data2,  col = 'red') +
             theme, 
             height = 7, width = 5)
+        #----------------------
+        ##Differential Analysis
+        #----------------------
+        #Create Deseq object for BALUA analysis
+        ddsvbal <- DESeqDataSetFromMatrix(countData = d1,
+                              colData = coldata2,
+                              design= ~ Sample.Type)
+        #Subset just the BAL
+        ddsvbal <- ddsvbal[, ddsvbal$Sample.Type %in% c("BAL","UA")]
+        #Covert Variable to Factor
+        ddsvbal$Sample.Type <- as.factor(ddsvbal$Sample.Type)
+        #Calculate geometric means prior to estimate size factor
+        gm_mean = function(x, na.rm=TRUE){ exp(sum(log(x[x > 0]), na.rm=na.rm) / length(x))}
+        geoMeans = apply(counts(ddsvbal), 1, gm_mean)        
+        #Estimate Factors of DESeq Object
+        ddsvbal <- estimateSizeFactors(ddsvbal, geoMeans = geoMeans)
+        #Variance Stablize the data
+        vsdvbal <- varianceStabilizingTransformation(ddsvbal)
+        #DropLevels
+        ddsvbal$Sample.Type <- droplevels(ddsvbal$Sample.Type)
+        #Set Reference
+        ddsvbal$Sample.Type <- relevel(ddsvbal$Sample.Type, ref ="UA")
+        #Run the differential Analysis: Lung Cancer Vs Wild Type --> positive is upregulated in Lung Cancer; Negative is down regulated
+        ddsvbal  <- DESeq(ddsvbal)
+        #Output Result Table
+        res1     <- results(ddsvbal, cooksCutoff=FALSE)
+        #----------------------
+        ##TABLES
+        #----------------------
+        #Get Assay Data For Compairson 1
+        GenusData <-as.data.frame(assay(ddsvbal)) #pruned to selected Genuses based on abundance
+        #Create Relative Abundance Table
+        df <-
+            GenusData %>% 
+                rownames_to_column('gs') %>%
+                group_by(gs) %>% 
+                summarise_all(funs(sum)) %>%
+                mutate_if(is.numeric, funs(./sum(.))) %>%
+                column_to_rownames('gs')
+        #Get the ColData for Each Comparison
+        coldata.1 <- coldata2[coldata2$Sample.Type=="UA",] %>%
+                    select(Study_Linked_ID)
+        coldata.2 <- coldata2[coldata2$Sample.Type=="BAL",] %>%
+                    select(Study_Linked_ID)
+        #keep Count data only for each comparison
+        needed<-which(colnames(df) %in% rownames(coldata.1))    
+        df.1 <- df[,needed]
+        needed2<-which(colnames(df) %in% rownames(coldata.2))    
+        df.2 <- df[,needed2]
+        #Convert Resuts table into a data.frame
+        res1 <- as.data.frame(res1)
+        #decide what otu to save 
+        otu.to.save <-as.character(rownames(res1))
+        #from relative table we should get the mean across the row of the otu table
+        df.1.meanRA <- rowMeans(df.1)
+        df.2.meanRA <- rowMeans(df.2)
+        #need to subset AND reorder just the otus that we have 
+        df.1.meanRA.save <- df.1.meanRA[otu.to.save]
+        df.2.meanRA.save <- df.2.meanRA[otu.to.save]
+        #add the abundnace data for the res dataframe
+        res1$abundance.1 <- df.1.meanRA.save
+        res1$abundance.2 <- df.2.meanRA.save
+        #Set Names of Results Table
+        res1 <- setNames(cbind(rownames(res1), res1, row.names = NULL), c("Gene.symbol","baseMean", "logFC", "lfcSE", "stat", "pvalue", "adj.P.Val","abundance.1","abundance.2")) 
+        #Get Assay Data For Compairson 2
+        #Write Tables of Differential Analysis
+        write.table(res1,file=paste0(counts,".UA_vs_BAL.txt"), sep="\t", col.names = NA, row.names = TRUE, quote=FALSE)
+        #Remove Any Data without LOGFC data
+        #=========================================================
+        #------------VOLCANO PLOT
+        #=========================================================
+        # Compute significance, with a maximum of 320 for the p-values set to 0 due to limitation of computation precision
+        res1$sig <- -log10(res1$adj.P.Val)
+        sum(is.infinite(res1$sig))
+        res1[is.infinite(res1$sig),"sig"] <- 350
+        ## Set Color Gradient
+        cols <- densCols(res1$logFC, res1$sig)
+        cols[res1$pvalue ==0] <- "purple"
+        cols[res1$logFC > 0 & res1$adj.P.Val < alpha ] <- "red"
+        cols[res1$logFC < 0 & res1$adj.P.Val < alpha ] <- "green"
+        res1$pch <- 19
+        res1$pch[res1$pvalue ==0] <- 6
+            ggsave(filename=paste0(counts,".DESEQ2_UA_VS_BAL_FDR0.05.pdf"),
+            ggplot(res1, aes(x = logFC, y = sig,label=Gene.symbol)) +
+            geom_point(color=cols, size = ifelse(res1$logFC>=1 & res1$adj.P.Val < alpha, 200 * res1$abundance.2, ifelse(res1$logFC<=-1 & res1$adj.P.Val < alpha, 200 * res1$abundance.1,1)),alpha=0.6) + #Chose Colors for dots
+            geom_text_repel(aes(label=ifelse(res1$logFC<(-3) & res1$adj.P.Val < alpha , as.character(res1$Gene.symbol),'')),size=3,force=25,segment.colour="grey",segment.alpha=0.5) +
+            geom_text_repel(aes(label=ifelse(res1$logFC>3 & res1$adj.P.Val < alpha , as.character(res1$Gene.symbol),'')),size=3,force=25,segment.colour="grey",segment.alpha=0.5) +
+            theme(legend.position = "none") +
+            geom_hline(yintercept=-log10(alpha), color="red",linetype="dashed") +
+            xlab("Effect size: log2(fold-change)") +
+            ylab("-log10(adjusted p-value)") + 
+            #ylim(0,20)+
+            theme, 
+            width=5, height=5)
 }
+
 

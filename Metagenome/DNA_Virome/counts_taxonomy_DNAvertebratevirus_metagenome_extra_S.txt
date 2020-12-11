@@ -1,0 +1,41 @@
+taxonomy	UCS.0002.UA_S1_L001	UCS.0002.UA_S1_L002	UCS.0007.UA_S2_L001	UCS.0007.UA_S2_L002	UCS.0010.UA_S3_L001	UCS.0010.UA_S3_L002	UCS.0016.UA_S4_L001	UCS.0016.UA_S4_L002	UCS.0018.UA_S5_L001	UCS.0018.UA_S5_L002	UCS.0020.BAL_S12_L001	UCS.0020.BAL_S12_L002	UCS.0025.BAL_S8_L001	UCS.0025.BAL_S8_L002	UCS.0040.BKG_S16_L001	UCS.0040.BKG_S16_L002	UCS.0047.BAL_S7_L001	UCS.0047.BAL_S7_L002	UCS.0064.BAL_S6_L001	UCS.0064.BAL_S6_L002	UCS.0069.BKG_S17_L001	UCS.0069.BKG_S17_L002	UCS.0070.BKG_S18_L001	UCS.0070.BKG_S18_L002	UCS.0081.BAL_S9_L001	UCS.0081.BAL_S9_L002	UCS.0085.BKG_S20_L001	UCS.0085.BKG_S20_L002	UCS.0136.BKG_S19_L001	UCS.0136.BKG_S19_L002	UCS.0147.BAL_S11_L001	UCS.0147.BAL_S11_L002	UCS.0163.BAL_S10_L001	UCS.0163.BAL_S10_L002	UCS.0191.BAL_S13_L001	UCS.0191.BAL_S13_L002	UCS.0192.BAL_S14_L001	UCS.0192.BAL_S14_L002	UCS.0194.BAL_S15_L001	UCS.0194.BAL_S15_L002
+Human gammaherpesvirus 4	16915	16137	0	0	0	2	0	0	480	466	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2	0	0	0	0
+Human alphaherpesvirus 1	2	0	0	0	1648	1539	0	0	1840	1706	0	2	2	9	18	14	0	0	0	0	80	62	32	11	0	4	14	16	8	6	0	0	0	0	292587	269364	0	2	0	0
+Human polyomavirus 5	234	185	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Tanapox virus	1	1	0	1	0	0	2	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0
+Human mastadenovirus E	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+African swine fever virus	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0
+Alphapapillomavirus 12	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Alphapapillomavirus 6	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Deltapapillomavirus 5	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Human mastadenovirus C	0	1	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Human betaherpesvirus 7	0	0	12	6	0	0	12	10	0	0	1	0	0	0	0	0	4	0	0	0	0	1	0	0	0	0	0	0	0	0	2	0	0	0	1	1	0	0	2	8
+Human betaherpesvirus 6B	0	0	2	11	0	0	0	1	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Human betaherpesvirus 5	0	0	1	1	0	0	0	0	0	1	0	0	0	0	0	0	6	15	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Alphapapillomavirus 10	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0
+Human mastadenovirus F	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Human alphaherpesvirus 2	0	0	0	0	2	11	1	0	5	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	322	295	0	0	0	0
+Gammapapillomavirus 6	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Deltapapillomavirus 4	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Human alphaherpesvirus 3	0	0	0	0	0	0	0	0	2	2	0	1	0	0	0	0	0	0	0	0	0	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Gammapapillomavirus 3	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Alphapapillomavirus 14	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0
+Gammapapillomavirus sp.	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Human gammaherpesvirus 8	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	1	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Variola virus	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	1	0	0
+Human betaherpesvirus 6A	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Betapapillomavirus 1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	202	176	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Gallid alphaherpesvirus 3	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	3	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Gammapapillomavirus 1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	4	0	0	0	0	0	0	0	0	0	0	0	0	0
+Omegapapillomavirus 1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0
+Torque teno mini virus 4	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0
+Gammapapillomavirus 11	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0
+Human mastadenovirus B	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0
+Torque teno midi virus 1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0
+Gammapapillomavirus 7	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	1	0
+Torque teno mini virus ALA22	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0
+Vaccinia virus	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0
+Monkeypox virus	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0
+Torque teno midi virus 15	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2	0
+Gallid alphaherpesvirus 2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1
+Torque teno virus 20	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1
