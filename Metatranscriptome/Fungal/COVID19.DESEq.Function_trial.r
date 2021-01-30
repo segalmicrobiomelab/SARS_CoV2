@@ -39,7 +39,7 @@ theme<-theme(panel.background = element_blank(),panel.border=element_rect(fill=N
 alpha = 0.05
 
 #Create Function For Analysis
-deseq <- function(metadata,counts,sampletype,comparison) {
+deseq <- function(metadata,counts,recounts,sampletype,comparison) {
         #Load MetaData
         coldata <- read.delim2(metadata, sep="\t")
         rownames(coldata) <- coldata$Study_Linked_ID
@@ -48,31 +48,54 @@ deseq <- function(metadata,counts,sampletype,comparison) {
                                 ifelse(coldata$X.3_groups==">28.day.on.vent","Greater_Than_28_days_on_vent",
                                 as.character(coldata$X.3_groups)))
         #load Count Data
-        mycounts <-read.delim2(paste0(counts,".txt"), sep="\t", row.names=1)
+        mycounts  <-read.delim2(paste0(counts,".txt"), sep="\t", row.names=1)
+        relcounts <-read.delim2(paste0(recounts,".txt"), sep="\t", row.names=1) 
         #Find matching sample ID for both datasets
         needed<-which(rownames(coldata) %in% colnames(mycounts))    
+        needed2<-which(rownames(coldata) %in% colnames(relcounts))    
         #keep only matching IDs from count data
         coldata2<-coldata[needed,]
         #Order Meta Data by SampleId
         coldata2 <- coldata2[order(coldata2$Study_Linked_ID),]
         #keep only matching IDs from count data
-        wanted<-which(colnames(mycounts) %in% rownames(coldata))    
+        wanted<-which(colnames(mycounts) %in% rownames(coldata))
+        wanted2<-which(colnames(relcounts) %in% rownames(coldata))
         #keep only matching IDs from count data
         mycounts2<-mycounts[,wanted]
+        relcounts2<-relcounts[,wanted]
         #Order Count Data by SampleID
         mycounts2 <-mycounts2[, order(colnames(mycounts2))]
+        relcounts2 <-relcounts2[, order(colnames(relcounts2))]
         #Convert any NAs to 0
         mycounts2[is.na(mycounts2)] <- 0
+        relcounts2[is.na(relcounts2)] <- 0
         #Copy of Count Table
         mycounts3 <- mycounts2
+        relcounts3 <- relcounts2
         #Convert Count Table into a Numeic Data Frame
         d1 = data.frame(lapply(mycounts3, function(x) as.numeric(as.character(x))),
                            check.names=F, row.names = rownames(mycounts3))
+        d2 = data.frame(lapply(relcounts3, function(x) as.numeric(as.character(x))),
+                           check.names=F, row.names = rownames(relcounts3))
+        #Remove 0 counts in relative Table
+        d2 <- d2[rowSums(d2[, -1] > 0) != 0, ]
+        d2 <- d2 %>% select(which(!colSums(d2, na.rm=TRUE) %in% 0))
+        #get the columns to match
+        wanted<-which(colnames(d1) %in% colnames(d2))
+        wanted2<-which(rownames(coldata2) %in% colnames(d2))
+        d1<-d1[,wanted]
+        coldata2<-coldata2[wanted2,]
+
         #Convert Data to Integers to Run DESEq
         d1[] <- lapply(d1, as.integer)
         ddsv <- DESeqDataSetFromMatrix(countData = d1,
                               colData = coldata2,
                               design= ~ Sample.Type)
+        #Remove non consented
+        ddsv <- ddsv[, ddsv$Paper_Final==1]                            
+        #Remove 0 counts from raw table                              
+        #idx <- colSums( counts(ddsv)==0) 
+        #ddsv <- ddsv[ , idx]                            
         #Calculate geometric means prior to estimate size factor
         gm_mean = function(x, na.rm=TRUE){ exp(sum(log(x[x > 0]), na.rm=na.rm) / length(x))}
         geoMeans = apply(counts(ddsv), 1, gm_mean)
@@ -80,6 +103,7 @@ deseq <- function(metadata,counts,sampletype,comparison) {
         ddsv <- estimateSizeFactors(ddsv, geoMeans = geoMeans)
         #Transforming data - Option #2 is variance stabilizing transformation
         vsdv <- varianceStabilizingTransformation(ddsv)
+        #vsdv <- rlog(ddsv, fitType="local",blind=FALSE)
         #----------------------
         ##Create graph of Reads
         #----------------------
@@ -205,9 +229,9 @@ deseq <- function(metadata,counts,sampletype,comparison) {
         ## extract only those samples in common between the two tables
         common.sample.ids <- intersect(rownames(coldata2), rownames(otus))
         otus <- otus[common.sample.ids,]
-        coldata2 <- coldata2[common.sample.ids,]
+        coldata3 <- coldata2[common.sample.ids,]
         #Check Contaminants based on BKG samples
-        contamdf.prev <- isContaminant(otus, method="prevalence", neg=coldata2$is.neg,threshold=0.5)
+        contamdf.prev <- isContaminant(otus, method="prevalence", neg=coldata3$is.neg,threshold=0.5)
         table(contamdf.prev$contaminant)
         #Select only BKG Samples
         BKG <- df %>% select(rownames(coldata2[coldata2$Sample.Type=='BKG',]))
@@ -234,6 +258,12 @@ deseq <- function(metadata,counts,sampletype,comparison) {
                               design= ~ Sample.Type)
         #Subset just the BAL
         ddsvbal <- ddsvbal[, ddsvbal$Sample.Type %in% "BAL"]
+        #Remove non consented
+        ddsvbal <- ddsvbal[, ddsvbal$Paper_Final==1]                            
+        #Subset Rel Table for BAL only
+        wanted<-which(colnames(d2) %in% colnames(ddsvbal))
+        #keep only matching IDs from count data
+        d3<-d2[,wanted]
         #Covert Variable to Factor
         ddsvbal$three_groups <- as.factor(ddsvbal$three_groups)
         #Create Seperate tables with each of the different compairsons
@@ -379,15 +409,7 @@ deseq <- function(metadata,counts,sampletype,comparison) {
         ##TABLES
         #----------------------
         #Get Assay Data For Compairson 1
-        GenusData <-as.data.frame(assay(ddsvbal1)) #pruned to selected Genuses based on abundance
-        #Create Relative Abundance Table
-        df <-
-            GenusData %>% 
-                rownames_to_column('gs') %>%
-                group_by(gs) %>% 
-                summarise_all(funs(sum)) %>%
-                mutate_if(is.numeric, funs(./sum(.))) %>%
-                column_to_rownames('gs')
+        df <- d3
         #Get the ColData for Each Comparison
         coldata.1 <- coldata2[coldata2$three_groups=="Less_Than_28_days_on_vent",] %>%
                     select(Study_Linked_ID)
@@ -407,22 +429,13 @@ deseq <- function(metadata,counts,sampletype,comparison) {
         df.2.meanRA <- rowMeans(df.2)
         #need to subset AND reorder just the otus that we have 
         df.1.meanRA.save <- df.1.meanRA[otu.to.save]
-        df.2.meanRA.save <- df.1.meanRA[otu.to.save]
+        df.2.meanRA.save <- df.2.meanRA[otu.to.save]
         #add the abundnace data for the res dataframe
         res1$abundance.1 <- df.1.meanRA.save
-        res1$abundance.2 <- df.1.meanRA.save
+        res1$abundance.2 <- df.2.meanRA.save
         #Set Names of Results Table
         res1 <- setNames(cbind(rownames(res1), res1, row.names = NULL), c("Gene.symbol","baseMean", "logFC", "lfcSE", "stat", "pvalue", "adj.P.Val","abundance.1","abundance.2")) 
         #Get Assay Data For Compairson 2
-        GenusData <-as.data.frame(assay(ddsvbal2)) #pruned to selected Genuses based on abundance
-        #Create Relative Abundance Table
-        df <-
-            GenusData %>% 
-                rownames_to_column('gs') %>%
-                group_by(gs) %>% 
-                summarise_all(funs(sum)) %>%
-                mutate_if(is.numeric, funs(./sum(.))) %>%
-                column_to_rownames('gs')
         #Get the ColData for Each Comparison
         coldata.1 <- coldata2[coldata2$three_groups=="Less_Than_28_days_on_vent",] %>%
                     select(Study_Linked_ID)
@@ -442,22 +455,13 @@ deseq <- function(metadata,counts,sampletype,comparison) {
         df.2.meanRA <- rowMeans(df.2)
         #need to subset AND reorder just the otus that we have 
         df.1.meanRA.save <- df.1.meanRA[otu.to.save]
-        df.2.meanRA.save <- df.1.meanRA[otu.to.save]
+        df.2.meanRA.save <- df.2.meanRA[otu.to.save]
         #add the abundnace data for the res dataframe
         res2$abundance.1 <- df.1.meanRA.save
-        res2$abundance.2 <- df.1.meanRA.save
+        res2$abundance.2 <- df.2.meanRA.save
         #Set Names of Results Table
         res2 <- setNames(cbind(rownames(res2), res2, row.names = NULL), c("Gene.symbol","baseMean", "logFC", "lfcSE", "stat", "pvalue", "adj.P.Val","abundance.1","abundance.2")) 
         #Get Assay Data For Compairson 3
-        GenusData <-as.data.frame(assay(ddsvbal3)) #pruned to selected Genuses based on abundance
-        #Create Relative Abundance Table
-        df <-
-            GenusData %>% 
-                rownames_to_column('gs') %>%
-                group_by(gs) %>% 
-                summarise_all(funs(sum)) %>%
-                mutate_if(is.numeric, funs(./sum(.))) %>%
-                column_to_rownames('gs')
         #Get the ColData for Each Comparison
         coldata.1 <- coldata2[coldata2$three_groups=="Greater_Than_28_days_on_vent",] %>%
                     select(Study_Linked_ID)
@@ -477,10 +481,10 @@ deseq <- function(metadata,counts,sampletype,comparison) {
         df.2.meanRA <- rowMeans(df.2)
         #need to subset AND reorder just the otus that we have 
         df.1.meanRA.save <- df.1.meanRA[otu.to.save]
-        df.2.meanRA.save <- df.1.meanRA[otu.to.save]
+        df.2.meanRA.save <- df.2.meanRA[otu.to.save]
         #add the abundnace data for the res dataframe
         res3$abundance.1 <- df.1.meanRA.save
-        res3$abundance.2 <- df.1.meanRA.save
+        res3$abundance.2 <- df.2.meanRA.save
         #Set Names of Results Table
         res3 <- setNames(cbind(rownames(res3), res3, row.names = NULL), c("Gene.symbol","baseMean", "logFC", "lfcSE", "stat", "pvalue", "adj.P.Val","abundance.1","abundance.2")) 
         #Write Tables of Differential Analysis
@@ -556,9 +560,13 @@ deseq <- function(metadata,counts,sampletype,comparison) {
         resy$abundance.2 <- as.numeric(as.character(resy$abundance.2))
         #PLOT IT
             ggsave(filename=paste0(counts,".BAL_three_groups_DESEQ2.pdf"),
-            ggplot(resy, aes(y=reorder(Gene.symbol,+start), x=logFC)) +
+            ggplot(resy, aes(y=reorder(Gene.symbol,-start), x=logFC,fill=col)) +
             facet_grid(~ group, scales = "free_y")+
-            geom_point(fill=ifelse(resy$adj.P.Val<0.05,"#D01C8B","white"),size = ifelse(resy$logFC>0 & resy$adj.P.Val < 0.05, 100 * resy$abundance.2, ifelse(resy$logFC<0 & resy$adj.P.Val < 0.05, 100 * resy$abundance.1,5)),color="black",alpha=0.8,shape=21)+
+            #geom_point(size = ifelse(resy$adj.P.Val<0.2 & resy$logFC>0, 2000 * resy$abundance.2, ifelse(resy$adj.P.Val<0.2 & resy$logFC<0, 2000 * resy$abundance.1,5)),color="black",alpha=0.8,shape=21)+
+            geom_point(size = ifelse(resy$adj.P.Val<0.2 & resy$logFC>0, 1000 * resy$abundance.2, ifelse(resy$adj.P.Val<0.2 & resy$logFC<0, 1000 * resy$abundance.1,5)),color="black",alpha=0.8,shape=21)+
+            #scale_fill_manual(values=c("#D01C8B","white"))+
+            scale_fill_manual(values=c("#D01C8B","#4DAC26","#FFD479","white"))+
+            #scale_fill_manual(values=c("#FFD479","white"))+
             scale_size_continuous(range=c(1, 27),guide=FALSE)+
             theme(panel.background = element_blank(),
                 panel.border=element_rect(fill=NA),
@@ -572,7 +580,7 @@ deseq <- function(metadata,counts,sampletype,comparison) {
         		legend.background = element_rect(color=NA))+
             xlab("") +
             ylab("")+
-            xlim(-2,7)+
+            xlim(-4,4)+
         	geom_vline(xintercept=0, color="red",linetype="dashed")+
         	guides(fill=FALSE),
             width=20, height=5)

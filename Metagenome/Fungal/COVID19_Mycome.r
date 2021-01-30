@@ -90,6 +90,8 @@ deseq <- function(metadata,counts,recounts,sampletype,comparison) {
         ddsv <- DESeqDataSetFromMatrix(countData = d1,
                               colData = coldata2,
                               design= ~ Sample.Type)
+        #Remove non consented
+        ddsv <- ddsv[, ddsv$Paper_Final==1]                            
         #Remove 0 counts from raw table                              
         #idx <- colSums( counts(ddsv)==0) 
         #ddsv <- ddsv[ , idx]                            
@@ -179,8 +181,8 @@ deseq <- function(metadata,counts,recounts,sampletype,comparison) {
         ##Alpha Diversity
         #----------------------
         #Calcultes Shannon Diversity
-        #ddsv$Shannon = diversity(vsdv0, index = "shannon", MARGIN = 2, base = exp(1))
-        ddsv$Shannon = diversity(d2, index = "shannon", MARGIN = 2, base = exp(1))
+        ddsv$Shannon = diversity(vsdv0, index = "shannon", MARGIN = 2, base = exp(1))
+        #ddsv$Shannon = diversity(d2, index = "shannon", MARGIN = 2, base = exp(1))
         #Convert to data frame for ggplot
         shannon = as.data.frame(colData(ddsv))
         #Remove any zero values
@@ -230,9 +232,9 @@ deseq <- function(metadata,counts,recounts,sampletype,comparison) {
         ## extract only those samples in common between the two tables
         common.sample.ids <- intersect(rownames(coldata2), rownames(otus))
         otus <- otus[common.sample.ids,]
-        coldata2 <- coldata2[common.sample.ids,]
+        coldata3 <- coldata2[common.sample.ids,]
         #Check Contaminants based on BKG samples
-        contamdf.prev <- isContaminant(otus, method="prevalence", neg=coldata2$is.neg,threshold=0.5)
+        contamdf.prev <- isContaminant(otus, method="prevalence", neg=coldata3$is.neg,threshold=0.5)
         table(contamdf.prev$contaminant)
         #Select only BKG Samples
         BKG <- df %>% select(rownames(coldata2[coldata2$Sample.Type=='BKG',]))
@@ -259,6 +261,8 @@ deseq <- function(metadata,counts,recounts,sampletype,comparison) {
                               design= ~ Sample.Type)
         #Subset just the BAL
         ddsvbal <- ddsvbal[, ddsvbal$Sample.Type %in% "BAL"]
+        #Remove non consented
+        ddsvbal <- ddsvbal[, ddsvbal$Paper_Final==1]                            
         #Subset Rel Table for BAL only
         wanted<-which(colnames(d2) %in% colnames(ddsvbal))
         #keep only matching IDs from count data
@@ -442,10 +446,10 @@ deseq <- function(metadata,counts,recounts,sampletype,comparison) {
         df.2.meanRA <- rowMeans(df.2)
         #need to subset AND reorder just the otus that we have 
         df.1.meanRA.save <- df.1.meanRA[otu.to.save]
-        df.2.meanRA.save <- df.1.meanRA[otu.to.save]
+        df.2.meanRA.save <- df.2.meanRA[otu.to.save]
         #add the abundnace data for the res dataframe
         res1$abundance.1 <- df.1.meanRA.save
-        res1$abundance.2 <- df.1.meanRA.save
+        res1$abundance.2 <- df.2.meanRA.save
         #Set Names of Results Table
         res1 <- setNames(cbind(rownames(res1), res1, row.names = NULL), c("Gene.symbol","baseMean", "logFC", "lfcSE", "stat", "pvalue", "adj.P.Val","abundance.1","abundance.2")) 
         #Get Assay Data For Compairson 2
@@ -477,10 +481,10 @@ deseq <- function(metadata,counts,recounts,sampletype,comparison) {
         df.2.meanRA <- rowMeans(df.2)
         #need to subset AND reorder just the otus that we have 
         df.1.meanRA.save <- df.1.meanRA[otu.to.save]
-        df.2.meanRA.save <- df.1.meanRA[otu.to.save]
+        df.2.meanRA.save <- df.2.meanRA[otu.to.save]
         #add the abundnace data for the res dataframe
         res2$abundance.1 <- df.1.meanRA.save
-        res2$abundance.2 <- df.1.meanRA.save
+        res2$abundance.2 <- df.2.meanRA.save
         #Set Names of Results Table
         res2 <- setNames(cbind(rownames(res2), res2, row.names = NULL), c("Gene.symbol","baseMean", "logFC", "lfcSE", "stat", "pvalue", "adj.P.Val","abundance.1","abundance.2")) 
         #Get Assay Data For Compairson 3
@@ -512,10 +516,10 @@ deseq <- function(metadata,counts,recounts,sampletype,comparison) {
         df.2.meanRA <- rowMeans(df.2)
         #need to subset AND reorder just the otus that we have 
         df.1.meanRA.save <- df.1.meanRA[otu.to.save]
-        df.2.meanRA.save <- df.1.meanRA[otu.to.save]
+        df.2.meanRA.save <- df.2.meanRA[otu.to.save]
         #add the abundnace data for the res dataframe
         res3$abundance.1 <- df.1.meanRA.save
-        res3$abundance.2 <- df.1.meanRA.save
+        res3$abundance.2 <- df.2.meanRA.save
         #Set Names of Results Table
         res3 <- setNames(cbind(rownames(res3), res3, row.names = NULL), c("Gene.symbol","baseMean", "logFC", "lfcSE", "stat", "pvalue", "adj.P.Val","abundance.1","abundance.2")) 
         #Write Tables of Differential Analysis
