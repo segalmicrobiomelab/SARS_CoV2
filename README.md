@@ -14,13 +14,12 @@
 6. Save the .pkg file, double-click it to open, and follow the installation instructions.
 
 ## Running the Analysis
-* [Human 16S rRNA gene Sequencing](https://github.com/segalmicrobiomelab/SARS_CoV2/tree/main/16S)
-* [Human RNA Transcriptome](https://github.com/segalmicrobiomelab/SARS_CoV2/blob/main/Host_Transcriptome)
+* [UpStream Processing](https://github.com/segalmicrobiomelab/SARS_CoV2/tree/main/Upstream)
+* [16S rRNA gene Sequencing](https://github.com/segalmicrobiomelab/SARS_CoV2/tree/main/16S)
 * [Metagenome](https://github.com/segalmicrobiomelab/SARS_CoV2/blob/main/Metagenome)
 * [Metatranscriptome](https://github.com/segalmicrobiomelab/SARS_CoV2/blob/main/Metatranscriptome)
-* [Resistome](https://github.com/segalmicrobiomelab/SARS_CoV2/blob/main/Resistome)
 * [MultiOMICS](https://github.com/segalmicrobiomelab/SARS_CoV2/blob/main/MultiOMICs)
-
+* [Human RNA Transcriptome](https://github.com/segalmicrobiomelab/SARS_CoV2/blob/main/Host_Transcriptome)
 
 ## For the Human 16S rRNA Gene Sequencing
 The Required Input Data
