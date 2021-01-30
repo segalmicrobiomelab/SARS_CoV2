@@ -1,11 +1,11 @@
 *Metagenome Analysis*
 ## Running the Analysis
-* [Bacterial](https://github.com/segalmicrobiomelab/SARS_CoV2/tree/main/Metatranscriptome/Bacterial)
-* [DNA Virome](https://github.com/segalmicrobiomelab/SARS_CoV2/tree/main/Metatranscriptome/DNA_Virome)
-* [Phages](https://github.com/segalmicrobiomelab/SARS_CoV2/tree/main/Metatranscriptome/Phages)
-* [Fungal](https://github.com/segalmicrobiomelab/SARS_CoV2/tree/main/Metatranscriptome/Fungal)
-* [Resistome](https://github.com/segalmicrobiomelab/SARS_CoV2/tree/main/Metatranscriptome/Resistome)
-* [Functional](https://github.com/segalmicrobiomelab/SARS_CoV2/tree/main/Metatranscriptome/Functional)
+* [Bacterial](https://github.com/segalmicrobiomelab/SARS_CoV2/tree/main/Metagenome/Bacterial)
+* [DNA Virome](https://github.com/segalmicrobiomelab/SARS_CoV2/tree/main/Metagenome/DNA_Virome)
+* [Phages](https://github.com/segalmicrobiomelab/SARS_CoV2/tree/main/Metagenome/Phages)
+* [Fungal](https://github.com/segalmicrobiomelab/SARS_CoV2/tree/main/Metagenome/Fungal)
+* [Resistome](https://github.com/segalmicrobiomelab/SARS_CoV2/tree/main/Metagenome/Resistome)
+* [Functional](https://github.com/segalmicrobiomelab/SARS_CoV2/tree/main/Metagenome/Functional)
 
 ## For the Bacterial Analysis
 The Required Input Data
