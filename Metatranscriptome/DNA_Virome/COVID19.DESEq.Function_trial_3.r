@@ -47,6 +47,11 @@ deseq <- function(metadata,counts,recounts,sampletype,comparison) {
         coldata$three_groups <- ifelse(coldata$X.3_groups=="\xb2.28.day.on.vent","Less_Than_28_days_on_vent",
                                 ifelse(coldata$X.3_groups==">28.day.on.vent","Greater_Than_28_days_on_vent",
                                 as.character(coldata$X.3_groups)))
+        coldata$two_groups <- ifelse(coldata$three_groups=="Less_Than_28_days_on_vent","Alive",
+                      ifelse(coldata$three_groups=="Greater_Than_28_days_on_vent", "Alive",
+                      as.character(coldata$three_groups)))
+        coldata$three_groups <- as.factor(coldata$three_groups)
+        coldata$two_groups <- as.factor(coldata$two_groups)
         #load Count Data
         mycounts  <-read.delim2(paste0(counts,".txt"), sep="\t", row.names=1)
         relcounts <-read.delim2(paste0(recounts,".txt"), sep="\t", row.names=1) 
