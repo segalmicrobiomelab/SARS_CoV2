@@ -1,8 +1,7 @@
 # SARS_CoV2
 *Manuscript Analysis*
 
-![Analysis Schematic](https://github.com/segalmicrobiomelab/SARS_CoV2/blob/master/Analytical%20schema.001.jpeg)
-
+![Analysis Schematic](https://github.com/segalmicrobiomelab/SARS_CoV2/blob/main/Analytical%20schema%20copy%5B1%5D%20copy.001.jpeg)
 
 ## Prerequisites
 * MacOS/Windows/Linux
