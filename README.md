@@ -17,7 +17,6 @@
 
 ## Running the Analysis
 * [UpStream Processing](https://github.com/segalmicrobiomelab/SARS_CoV2/tree/main/Upstream)
-* [16S rRNA gene Sequencing](https://github.com/segalmicrobiomelab/SARS_CoV2/tree/main/16S)
 * [Metagenome](https://github.com/segalmicrobiomelab/SARS_CoV2/blob/main/Metagenome)
 * [Metatranscriptome](https://github.com/segalmicrobiomelab/SARS_CoV2/blob/main/Metatranscriptome)
 * [MultiOMICS](https://github.com/segalmicrobiomelab/SARS_CoV2/blob/main/MultiOMICs)
